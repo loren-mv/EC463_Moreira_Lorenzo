@@ -1,0 +1,16 @@
+Time resolution is 1 ps
+===============================================
+    FP32 to Posit Conversion Testbench
+===============================================
+ Time(ns) | FP32(hex) | Posit(binary)
+-----------------------------------------------
+FP32 input = 3f800000 -> Posit output = 00111111111111111111111111111111
+FP32 input = 40000000 -> Posit output = 00111111111111111111111111111111
+FP32 input = 40400000 -> Posit output = 00111111111111111111111111111111
+FP32 input = c0000000 -> Posit output = 10111111111111111111111111111111
+FP32 input = 3f000000 -> Posit output = 01000000000000000000000000000000
+FP32 input = 00000000 -> Posit output = 00000000000000000000000000000000
+FP32 input = 7f800000 -> Posit output = 01111111111111111111111111111111
+FP32 input = ff800000 -> Posit output = 11111111111111111111111111111111
+===============================================
+$finish called at time : 125 ns : File "C:/Users/loren/OneDrive/Documents/GitHub/EC463_Moreira_Lorenzo/Posit/Posit.srcs/sim_1/new/tb_convert.v" Line 97
