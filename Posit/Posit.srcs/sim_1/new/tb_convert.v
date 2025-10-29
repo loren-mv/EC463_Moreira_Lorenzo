@@ -22,11 +22,12 @@
 
 module tb_convert;
 
-// --------------------------------------------
+ 
+    // --------------------------------------------
     // Parameters for DUT (Device Under Test)
     // --------------------------------------------
-    parameter N  = 32;   // posit size
-    parameter ES = 2;   // exponent size
+    parameter N  = 16;   // posit size
+    parameter ES = 1;   // exponent size
 
     // --------------------------------------------
     // Testbench signals
@@ -55,7 +56,7 @@ module tb_convert;
     // --------------------------------------------
     // Task to apply test vectors
     // --------------------------------------------
-    task apply_fp32(input [31:0] val);
+    task convert(input [31:0] val);
         begin
             fp32_in = val;
             @(posedge clk);  // wait one clock
@@ -82,14 +83,14 @@ module tb_convert;
 
         // Apply a few IEEE 754 float values:
         // Format: sign exponent fraction
-        apply_fp32(32'h3F800000); // 1.0
-        apply_fp32(32'h40000000); // 2.0
-        apply_fp32(32'h40400000); // 3.0
-        apply_fp32(32'hC0000000); // -2.0
-        apply_fp32(32'h3F000000); // 0.5
-        apply_fp32(32'h00000000); // 0.0
-        apply_fp32(32'h7F800000); // +Inf
-        apply_fp32(32'hFF800000); // -Inf
+        convert(32'h3F800000); // 1.0
+        convert(32'h40000000); // 2.0
+        convert(32'h40400000); // 3.0
+        convert(32'hC0000000); // -2.0
+        convert(32'h3F000000); // 0.5
+        convert(32'h00000000); // 0.0
+        convert(32'h7F800000); // +Inf
+        convert(32'hFF800000); // -Inf
 
         // Wait a few cycles and finish
         repeat(3) @(posedge clk);

@@ -1,7 +1,7 @@
 # compile verilog/system verilog design source files
 verilog xil_defaultlib  \
-"../../../../Posit.srcs/sources_1/new/convert.v" \
-"../../../../Posit.srcs/sim_1/new/tb_convert.v" \
+"../../../../Posit.srcs/sources_1/new/convertBF.v" \
+"../../../../Posit.srcs/sim_1/new/tb_convertBF.v" \
 
 # compile glbl module
 verilog xil_defaultlib "glbl.v"
