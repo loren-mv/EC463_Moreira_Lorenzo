@@ -1,0 +1,17 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../STFT.gen/sources_1/ip/floating_point_0/sim/floating_point_0.v" \
+"../../../../STFT.gen/sources_1/ip/floating_point_2/sim/floating_point_2.v" \
+"../../../../STFT.srcs/sources_1/new/complex_fpaddsub.v" \
+"../../../../STFT.srcs/sources_1/new/complex_fpmult.v" \
+"../../../../STFT.srcs/sources_1/new/fp_box_window.v" \
+"../../../../STFT.srcs/sources_1/new/fp_butterfly.v" \
+"../../../../STFT.srcs/sources_1/new/fp_fft4.v" \
+"../../../../STFT.srcs/sources_1/new/fp_stft4_top.v" \
+"../../../../STFT.srcs/sim_1/new/tb_fp_stft4_top.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

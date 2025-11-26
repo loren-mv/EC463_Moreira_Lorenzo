@@ -21,72 +21,116 @@
 
 
 module complex_fpmult(
+    input clk,valid_in,
     input[31:0] re_in1, im_in1,
     input[31:0] re_in2, im_in2,
     output[31:0] re_out,im_out,
-    output re_exception, im_exception, sum_exception
+    output valid_out
     );
     
 		
 //(a + jb)(c + jd) = [ac - bd] + j[ad + bc]
 wire[31:0] ac;
-wire ProdReOF, ProdReUF, ProdReException;
-Multiplication ProdRe(.a_operand(re_in1), 
-                    .b_operand(re_in2), 
-                    .Exception(ProdReException), 
-                    .Overflow(ProdReOF), 
-                    .Underflow(ProdReUF), 
-                    .result(ac));
+wire prodreA_tready,prodreB_tready, ac_tready, ac_tvalid;
+
+floating_point_2 ProdRe(.aclk(clk),
+                    .s_axis_a_tdata(re_in1),
+                    .s_axis_a_tready(prodreA_tready),
+                    .s_axis_a_tvalid(valid_in), 
+                    .s_axis_b_tdata(re_in2),
+                    .s_axis_b_tready(prodreB_tready),
+                    .s_axis_b_tvalid(valid_in), 
+                    .m_axis_result_tdata(ac),
+                    .m_axis_result_tready(1'b1),
+                    .m_axis_result_tvalid(ac_tvalid)
+                    );
+             
 
 wire[31:0] bd;
-wire ProdImOF, ProdImUF, ProdImException;
-Multiplication ProdIm(.a_operand(im_in1), 
-                    .b_operand(im_in2), 
-                    .Exception(ProdImException), 
-                    .Overflow(ProdImOF), 
-                    .Underflow(ProdImUF), 
-                    .result(bd));
+wire prodimA_tready, prodimB_tready, b_tready, bd_tready, bd_tvalid;
+floating_point_2 ProdIm(.aclk(clk),
+                    .s_axis_a_tdata(im_in1),
+                    .s_axis_a_tready(prodimA_tready),
+                    .s_axis_a_tvalid(valid_in), 
+                    .s_axis_b_tdata(im_in2),
+                    .s_axis_b_tready(prodimB_tready),
+                    .s_axis_b_tvalid(valid_in), 
+                    .m_axis_result_tdata(bd),
+                    .m_axis_result_tready(1'b1),
+                    .m_axis_result_tvalid(bd_tvalid)
+                    );
 
 wire[31:0] ad;
-wire ProdReImOF, ProdReImUF, ProdReImException;
-Multiplication ProdReIm(.a_operand(re_in1), 
-                    .b_operand(im_in2), 
-                    .Exception(ProdReImException), 
-                    .Overflow(ProdReImOF), 
-                    .Underflow(ProdReImUF), 
-                    .result(ad));
+wire ad_tready, ad_tvalid;
+wire prodreimA_tready, prodreimB_tready;
+floating_point_2 ProdReIm(.aclk(clk),
+                    .s_axis_a_tdata(re_in1),
+                    .s_axis_a_tready(prodreimA_tready),
+                    .s_axis_a_tvalid(valid_in), 
+                    .s_axis_b_tdata(im_in2),
+                    .s_axis_b_tready(prodreimB_tready),
+                    .s_axis_b_tvalid(valid_in), 
+                    .m_axis_result_tdata(ad),
+                    .m_axis_result_tready(1'b1),
+                    .m_axis_result_tvalid(ad_tvalid)
+                    );
 
 wire[31:0] bc;
-wire ProdImReOF, ProdImReUF, ProdImReException;
-Multiplication ProdImRe(.a_operand(im_in1), 
-                    .b_operand(re_in2), 
-                    .Exception(ProdImReException), 
-                    .Overflow(ProdImReOF), 
-                    .Underflow(ProdImReUF), 
-                    .result(bc));
-                    
+wire bc_tready, bc_tvalid;
+wire prodimreA_tready, prodimreB_tready;
+floating_point_2 ProdImRe(.aclk(clk),
+                    .s_axis_a_tdata(im_in1),
+                    .s_axis_a_tready(prodimreA_tready),
+                    .s_axis_a_tvalid(valid_in), 
+                    .s_axis_b_tdata(re_in2),
+                    .s_axis_b_tready(prodimreB_tready),
+                    .s_axis_b_tvalid(valid_in), 
+                    .m_axis_result_tdata(bc),
+                    .m_axis_result_tready(1'b1),
+                    .m_axis_result_tvalid(bc_tvalid)
+                    );
+
+
+wire valid_prod; 
+assign valid_prod = bc_tvalid & ad_tvalid & bc_tvalid & ac_tvalid;     
 //(a + jb)(c + jd) = [ac - bd] + j[ad + bc]
-wire realpart_exception;        
-Addition_Subtraction realpart_addsub(
-        .a_operand(ac),
-        .b_operand(bd),
-        .AddBar_Sub(1'b1),
-        .Exception(realpart_exception),
-        .result(re_out)
+
+//wire[31:0] bc;
+wire re_tready, re_tvalid;       
+wire real_addsubA_tready, real_addsubB_tready, real_addsubOP_tready;
+floating_point_0 realpart_addsub(.aclk(clk),
+                    .s_axis_a_tdata(ac),
+                    .s_axis_a_tready(real_addsubA_tready),
+                    .s_axis_a_tvalid(valid_prod),
+                    .s_axis_operation_tdata(8'h01),
+                    .s_axis_operation_tready(real_addsubOP_tready),
+                    .s_axis_operation_tvalid(valid_prod),
+                    .s_axis_b_tdata(bd),
+                    .s_axis_b_tready(real_addsubB_tready),
+                    .s_axis_b_tvalid(valid_prod),
+                    .m_axis_result_tdata(re_out),
+                    .m_axis_result_tready(1'b1),
+                    .m_axis_result_tvalid(re_tvalid)
+                    );
+
+wire im_tready, im_tvalid;
+wire im_addsubA_tready, im_addsubB_tready, im_addsubOP_tready;
+floating_point_0 im_addsub(.aclk(clk),
+                    .s_axis_a_tdata(ad),
+                    .s_axis_a_tready(im_addsubA_tready),
+                    .s_axis_a_tvalid(valid_prod),
+                    .s_axis_operation_tdata(8'h00),
+                    .s_axis_operation_tready(im_addsubOP_tready),
+                    .s_axis_operation_tvalid(valid_prod),
+                    .s_axis_b_tdata(bc),
+                    .s_axis_b_tready(im_addsubB_tready),
+                    .s_axis_b_tvalid(valid_prod),
+                    .m_axis_result_tdata(im_out),
+                    .m_axis_result_tready(1'b1),
+                    .m_axis_result_tvalid(im_tvalid)
+                    
     );
 
-wire imaginarypart_exception;
-Addition_Subtraction im_addsub(
-        .a_operand(ad),
-        .b_operand(bc),
-        .AddBar_Sub(1'b0),
-        .Exception(imaginarypart_exception),
-        .result(im_out)
-    );
-
-assign re_exception = ProdReException || ProdImException;
-assign im_exception = ProdReImException || ProdImReException;
-assign sum_exception = realpart_exception || imaginarypart_exception;
-
+assign valid_out = re_tvalid & im_tvalid;
 
 endmodule

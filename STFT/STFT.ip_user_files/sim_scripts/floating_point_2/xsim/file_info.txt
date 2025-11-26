@@ -1,0 +1,2 @@
+floating_point_2.v,verilog,xil_defaultlib,../../../../STFT.gen/sources_1/ip/floating_point_2/sim/floating_point_2.v,
+glbl.v,Verilog,xil_defaultlib,glbl.v

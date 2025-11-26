@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module fp_stft4_top(clk, rst, valid_in, re_in, im_in, re_X0, im_X0, re_X1, im_X1, re_X2, im_X2, re_X3, im_X3, frame_done);
+module posit_stft4_top(clk, rst, valid_in, re_in, im_in, re_X0, im_X0, re_X1, im_X1, re_X2, im_X2, re_X3, im_X3, frame_done);
     parameter width = 32;
     input clk, rst, valid_in;
     input[width-1:0] re_in;
@@ -110,7 +110,7 @@ module fp_stft4_top(clk, rst, valid_in, re_in, im_in, re_X0, im_X0, re_X1, im_X1
                           .re_in2(re_buf[3]), .im_in2(im_buf[3]),
                           .re_out(re_xw3),. im_out(im_xw3),
                           .re_exception(), .im_exception(), .sum_exception());
-        fp_fft4 fft4 (
+        posit_fft4 fft4 (
         .re_x0(re_xw0), .im_x0(im_xw0),
         .re_x1(re_xw1), .im_x1(im_xw1),
         .re_x2(re_xw2), .im_x2(im_xw2),
