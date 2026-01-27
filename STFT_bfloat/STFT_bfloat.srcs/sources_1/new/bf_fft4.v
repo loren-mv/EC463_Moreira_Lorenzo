@@ -58,7 +58,7 @@ wire[15:0] re_d12, im_d12;
 //S11 stage 1 part 1
 //twiddle factor = 1
 wire validS11, validS12;
-fp_butterfly S11(.clk(clk),
+bf_butterfly S11(.clk(clk),
                  .valid_in(valid_in),
                  .re_A(re_x0),
                  .im_A(im_x0),
@@ -73,7 +73,7 @@ fp_butterfly S11(.clk(clk),
                  .valid_out(validS11)
                  );
 //twiddle factor = 1
-fp_butterfly S12(.clk(clk),
+bf_butterfly S12(.clk(clk),
                  .valid_in(valid_in),
                  .re_A(re_x1),
                  .im_A(im_x1),
@@ -92,7 +92,7 @@ wire validS2 = validS11 & validS12;
 
 wire validS21, validS22;
 //twiddle factor = 1
-fp_butterfly S21(.clk(clk),
+bf_butterfly S21(.clk(clk),
                  .valid_in(validS2),
                  .re_A(re_c11),
                  .im_A(im_c11),
@@ -108,7 +108,7 @@ fp_butterfly S21(.clk(clk),
                  );
                  
 //twiddle factor = -j                 
-fp_butterfly S22(.clk(clk),
+bf_butterfly S22(.clk(clk),
                  .valid_in(validS2),
                  .re_A(re_d11),
                  .im_A(im_d11),

@@ -79,22 +79,22 @@ module bf_stft4_top(clk, rst, valid_in, re_in, im_in, re_X0, im_X0, re_X1, im_X1
         wire[15:0] re_w3, im_w3;    
         wire valid_w0, valid_w1, valid_w2, valid_w3;
         
-        fp_box_window w0(.index(0), 
+        bf_box_window w0(.index(0), 
                          .re_w(re_w0), 
                          .im_w(im_w0),
                          .valid_out(valid_w0)
                          );
-        fp_box_window w1(.index(0), 
+        bf_box_window w1(.index(0), 
                          .re_w(re_w1), 
                          .im_w(im_w1),
                          .valid_out(valid_w1)
                          );
-        fp_box_window w2(.index(0),
+        bf_box_window w2(.index(0),
                          .re_w(re_w2),
                          .im_w(im_w2),
                          .valid_out(valid_w2)
                          );
-        fp_box_window w3(.index(0),
+        bf_box_window w3(.index(0),
                          .re_w(re_w3),
                          .im_w(im_w3),
                          .valid_out(valid_w3)
@@ -110,7 +110,7 @@ module bf_stft4_top(clk, rst, valid_in, re_in, im_in, re_X0, im_X0, re_X1, im_X1
         
         wire valid_s0, valid_s1, valid_s2, valid_s3;
         
-        complex_fpmult s0(.clk(clk),
+        complex_bfmult s0(.clk(clk),
                           .valid_in(valid_w),
                           .re_in1(re_w0), 
                           .im_in1(im_w0),
@@ -121,7 +121,7 @@ module bf_stft4_top(clk, rst, valid_in, re_in, im_in, re_X0, im_X0, re_X1, im_X1
                           .valid_out(valid_s0)
                           );
         
-        complex_fpmult s1(.clk(clk),
+        complex_bfmult s1(.clk(clk),
                           .valid_in(valid_w),
                           .re_in1(re_w1),
                           .im_in1(im_w1),
@@ -132,7 +132,7 @@ module bf_stft4_top(clk, rst, valid_in, re_in, im_in, re_X0, im_X0, re_X1, im_X1
                           .valid_out(valid_s1)
                           );                  
         
-         complex_fpmult s2(.clk(clk),
+         complex_bfmult s2(.clk(clk),
                           .valid_in(valid_w),
                           .re_in1(re_w2),
                           .im_in1(im_w2),
@@ -143,7 +143,7 @@ module bf_stft4_top(clk, rst, valid_in, re_in, im_in, re_X0, im_X0, re_X1, im_X1
                           .valid_out(valid_s2)
                           );
                           
-        complex_fpmult s3(.clk(clk),
+         complex_bfmult s3(.clk(clk),
                           .valid_in(valid_w),
                           .re_in1(re_w3),
                           .im_in1(im_w3),
@@ -156,7 +156,7 @@ module bf_stft4_top(clk, rst, valid_in, re_in, im_in, re_X0, im_X0, re_X1, im_X1
                           
         wire valid_s;
         assign valid_s = valid_s0 & valid_s1 & valid_s2 & valid_s3;
-        fp_fft4 fft4 (.clk(clk),
+        bf_fft4 bf_fft4 (.clk(clk),
                       .valid_in(valid_s),
                       .re_x0(re_xw0), 
                       .im_x0(im_xw0),

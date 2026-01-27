@@ -31,7 +31,7 @@ module bf_butterfly(clk,valid_in, re_A,im_A,re_B,im_B,re_W,im_W, re_C, im_C, re_
     
     wire[15:0] re_T, im_T;
     wire valid_mult;
-    complex_fpmult mult(.clk(clk),
+    complex_bfmult mult(.clk(clk),
                         .valid_in(valid_in),
                         .re_in1(re_B),
                         .im_in1(im_B),
@@ -42,7 +42,7 @@ module bf_butterfly(clk,valid_in, re_A,im_A,re_B,im_B,re_W,im_W, re_C, im_C, re_
                         .valid_out(valid_mult)
                         );
     wire out_valid1, out_valid2;
-    complex_fpaddsub Cadd(.clk(clk),
+    complex_bfaddsub Cadd(.clk(clk),
                         .valid_in(valid_mult),
                         .re_in1(re_A),
                         .im_in1(im_A),
@@ -53,7 +53,7 @@ module bf_butterfly(clk,valid_in, re_A,im_A,re_B,im_B,re_W,im_W, re_C, im_C, re_
                         .im_out(im_C),
                         .out_valid(out_valid1)
                         );
-    complex_fpaddsub Dadd(.clk(clk),
+    complex_bfaddsub Dadd(.clk(clk),
                         .valid_in(valid_mult),
                         .re_in1(re_A),
                         .im_in1(im_A),
