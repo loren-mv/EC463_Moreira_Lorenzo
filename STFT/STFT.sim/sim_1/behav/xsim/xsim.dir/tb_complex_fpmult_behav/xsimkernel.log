@@ -1,7 +1,0 @@
-Running: xsim.dir/tb_complex_fpmult_behav/xsimk.exe -simmode gui -wdb tb_complex_fpmult_behav.wdb -simrunnum 0 -socket 52222
-Design successfully loaded
-Design Loading Memory Usage: 27004 KB (Peak: 27004 KB)
-Design Loading CPU Usage: 31 ms
-Simulation completed
-Simulation Memory Usage: 28448 KB (Peak: 28448 KB)
-Simulation CPU Usage: 62 ms
